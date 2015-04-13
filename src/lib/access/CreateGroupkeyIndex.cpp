@@ -41,6 +41,7 @@ auto _ = QueryParser::registerPlanOperation<CreateGroupkeyIndex>("CreateGroupkey
 }
 
 CreateGroupkeyIndex::~CreateGroupkeyIndex() {}
+CreateGroupkeyIndex::CreateGroupkeyIndex() {}
 
 void CreateGroupkeyIndex::executePlanOperation() {
   const auto& in = input.getTable(0);

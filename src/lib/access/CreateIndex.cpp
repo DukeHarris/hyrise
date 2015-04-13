@@ -41,6 +41,7 @@ auto _ = QueryParser::registerPlanOperation<CreateIndex>("CreateIndex");
 }
 
 CreateIndex::~CreateIndex() {}
+CreateIndex::CreateIndex() {}
 
 void CreateIndex::executePlanOperation() {
   const auto& in = input.getTable(0);

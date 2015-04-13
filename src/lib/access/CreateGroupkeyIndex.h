@@ -10,6 +10,7 @@ namespace access {
 class CreateGroupkeyIndex : public PlanOperation {
  public:
   virtual ~CreateGroupkeyIndex();
+  CreateGroupkeyIndex();
 
   void executePlanOperation();
   /// set index name in field "_index_name"

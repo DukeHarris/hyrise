@@ -10,6 +10,8 @@
 #include "access/storage/TableUnload.h"
 #include "access/storage/JsonTable.h"
 #include "access/storage/SetTable.h"
+#include "access/CreateIndex.h"
+#include "access/CreateGroupkeyIndex.h"
 
 using namespace hsql;
 
@@ -23,13 +25,13 @@ SQLDataDefinitionTransformer::SQLDataDefinitionTransformer(SQLStatementTransform
 
 SQLDataDefinitionTransformer::~SQLDataDefinitionTransformer() {}
 
-/** 
+/**
  * Transforms a create statement into tasks
  */
 TransformationResult SQLDataDefinitionTransformer::transformCreateStatement(CreateStatement* create) {
   TransformationResult meta = ALLOC_TRANSFORMATIONRESULT();
 
-  if (io::StorageManager::getInstance()->exists(create->table_name)) {
+  if (io::StorageManager::getInstance()->exists(create->table_name) && (create->type == CreateStatement::kTableFromTbl || create->type == CreateStatement::kTable)) {
     if (create->if_not_exists) {
       // Table already exists so skip this statement
       _builder.addNoOp(meta);
@@ -69,7 +71,7 @@ TransformationResult SQLDataDefinitionTransformer::transformCreateStatement(Crea
     json_table->setGroups(groups);
     json_table->setUseStore(true);
     _builder.addPlanOp(json_table, "JsonTable", meta);
-    
+
     // Give it a name and persist it within Hyrise storage manager
     auto set_table = std::make_shared<SetTable>(create->table_name);
     set_table->addDependency(json_table);
@@ -78,6 +80,41 @@ TransformationResult SQLDataDefinitionTransformer::transformCreateStatement(Crea
     meta.addTask(json_table);
     meta.addTask(set_table);
 
+  } else if(create->type == CreateStatement::kIndex) {
+
+    meta = _server.addGetTable(create->table_name, true);
+
+    if(create->index_type == CreateStatement::kDefaultIndex) {
+
+      auto create_index = std::make_shared<CreateIndex>();
+      create_index->setIndexName(create->index_name);
+
+      for (unsigned i = 0; i < create->index_columns->size(); ++i) {
+        create_index->addField(Json::Value(create->index_columns->at(i)));
+      }
+
+      _builder.addPlanOp(create_index, "CreateIndex", meta);
+
+
+    } else if(create->index_type == CreateStatement::kGroupKeyIndex) {
+
+      auto create_index = std::make_shared<CreateGroupkeyIndex>();
+      create_index->setIndexName(create->index_name);
+
+      for (unsigned i = 0; i < create->index_columns->size(); ++i) {
+        create_index->addField(Json::Value(create->index_columns->at(i)));
+      }
+
+      _builder.addPlanOp(create_index, "CreateGroupkeyIndex", meta);
+      std::cout << "Groupkey" << std::endl;
+
+
+    } else {
+      _server.throwError("Unsupported index type!");
+    }
+
+
+
   } else {
     _server.throwError("Unsupported create type!");
   }
@@ -85,6 +122,9 @@ TransformationResult SQLDataDefinitionTransformer::transformCreateStatement(Crea
   // Add No op, so we don't send data back
   _builder.addCommit(meta);
   _builder.addNoOp(meta);
+
+  io::StorageManager::getInstance()->printResources();
+
   return meta;
 }
 

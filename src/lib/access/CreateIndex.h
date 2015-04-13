@@ -10,6 +10,7 @@ namespace access {
 class CreateIndex : public PlanOperation {
  public:
   virtual ~CreateIndex();
+  CreateIndex();
 
   void executePlanOperation();
   /// set index name in field "_index_name"
