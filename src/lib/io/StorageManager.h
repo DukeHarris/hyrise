@@ -77,6 +77,9 @@ class StorageManager : public ResourceManager {
   /// saves the inverted index as name.
   void addInvertedIndex(const std::string& name, std::shared_ptr<storage::AbstractIndex> _index);
 
+  /// remove the index stored under name name
+  void removeIndex(const std::string& name);
+
   /// returns the index stored under name name.
   std::shared_ptr<storage::AbstractIndex> getInvertedIndex(const std::string& name, bool unsafe = false);
 

@@ -155,6 +155,12 @@ void StorageManager::addInvertedIndex(const std::string& name, std::shared_ptr<s
   add(name, index);
 }
 
+void StorageManager::removeIndex(const std::string& name) {
+  if (exists(name))
+    remove(name);
+}
+
+
 std::shared_ptr<storage::AbstractIndex> StorageManager::getInvertedIndex(const std::string& name, bool unsafe) {
   return get<storage::AbstractIndex>(name, unsafe);
 }

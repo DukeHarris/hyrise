@@ -12,6 +12,8 @@
 #include "access/storage/SetTable.h"
 #include "access/CreateIndex.h"
 #include "access/CreateGroupkeyIndex.h"
+#include "access/DropIndex.h"
+
 
 using namespace hsql;
 
@@ -123,8 +125,6 @@ TransformationResult SQLDataDefinitionTransformer::transformCreateStatement(Crea
   _builder.addCommit(meta);
   _builder.addNoOp(meta);
 
-  io::StorageManager::getInstance()->printResources();
-
   return meta;
 }
 
@@ -153,6 +153,20 @@ TransformationResult SQLDataDefinitionTransformer::transformDropStatement(DropSt
         _server.throwError("Can't drop statement. It doesn't exist.", drop->name);
       }
       _builder.addNoOp(meta);
+      break;
+    }
+
+    case DropStatement::kIndex: {
+
+      if (!io::StorageManager::getInstance()->exists(drop->name)) {
+        _server.throwError("Can't drop index. It doesn't exist.", drop->name);
+      }
+
+      auto drop_op = std::make_shared<DropIndex>();
+      drop_op->setIndexName(drop->name);
+      _builder.addPlanOp(drop_op, "DropIndex", meta);
+      _builder.addCommit(meta);
+
       break;
     }
 
