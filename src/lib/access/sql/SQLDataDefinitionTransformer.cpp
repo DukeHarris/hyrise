@@ -12,6 +12,7 @@
 #include "access/storage/SetTable.h"
 #include "access/CreateIndex.h"
 #include "access/CreateGroupkeyIndex.h"
+#include "access/CreateDeltaIndex.h"
 #include "access/DropIndex.h"
 
 
@@ -86,34 +87,43 @@ TransformationResult SQLDataDefinitionTransformer::transformCreateStatement(Crea
 
     meta = _server.addGetTable(create->table_name, true);
 
-    if(create->index_type == CreateStatement::kDefaultIndex) {
+    // if(create->index_type == CreateStatement::kDefaultIndex) {
 
-      auto create_index = std::make_shared<CreateIndex>();
-      create_index->setIndexName(create->index_name);
+    //   auto create_index = std::make_shared<CreateIndex>();
+    //   create_index->setIndexName(create->index_name);
 
-      for (unsigned i = 0; i < create->index_columns->size(); ++i) {
-        create_index->addField(Json::Value(create->index_columns->at(i)));
-      }
+    //   for (unsigned i = 0; i < create->index_columns->size(); ++i) {
+    //     create_index->addField(Json::Value(create->index_columns->at(i)));
+    //   }
 
-      _builder.addPlanOp(create_index, "CreateIndex", meta);
+    //   _builder.addPlanOp(create_index, "CreateIndex", meta);
 
 
-    } else if(create->index_type == CreateStatement::kGroupKeyIndex) {
+    // } else if(create->index_type == CreateStatement::kGroupKeyIndex) {
 
       auto create_index = std::make_shared<CreateGroupkeyIndex>();
-      create_index->setIndexName(create->index_name);
+      create_index->setIndexName(std::string(create->index_name) + "_main");
 
       for (unsigned i = 0; i < create->index_columns->size(); ++i) {
         create_index->addField(Json::Value(create->index_columns->at(i)));
       }
 
       _builder.addPlanOp(create_index, "CreateGroupkeyIndex", meta);
-      std::cout << "Groupkey" << std::endl;
 
 
-    } else {
-      _server.throwError("Unsupported index type!");
-    }
+      // auto create_delta_index = std::make_shared<CreateDeltaIndex>();
+      // create_index->setIndexName(std::string(create->index_name) + "_delta");
+
+      // for (unsigned i = 0; i < create->index_columns->size(); ++i) {
+      //   create_delta_index->addField(Json::Value(create->index_columns->at(i)));
+      // }
+
+      // _builder.addPlanOp(create_delta_index, "CreateDeltaIndex", meta);
+
+
+    // } else {
+    //   _server.throwError("Unsupported index type!");
+    // }
 
 
 

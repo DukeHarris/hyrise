@@ -48,17 +48,8 @@ void CreateGroupkeyIndex::executePlanOperation() {
   std::shared_ptr<storage::AbstractIndex> _index;
   auto c_store = std::dynamic_pointer_cast<const storage::Store>(in);
   auto store = std::const_pointer_cast<storage::Store>(c_store);
-  if (_field_definition.size() == 1) {
-    // single-column index
-    auto column = _field_definition[0];
 
-    CreateGroupkeyIndexFunctor fun(_index_name, in, column);
-    storage::type_switch<hyrise_basic_types> ts;
-    _index = ts(in->typeOfColumn(column), fun);
-  } else {
-    // multi-column index
-    _index = std::make_shared<storage::GroupkeyIndex<compound_valueid_key_t>>(in, _field_definition, true, _index_name);
-  }
+  _index = std::make_shared<storage::GroupkeyIndex<compound_valueid_key_t>>(in, _field_definition, true, _index_name);
 
   io::StorageManager* sm = io::StorageManager::getInstance();
   sm->addInvertedIndex(_index_name, _index);

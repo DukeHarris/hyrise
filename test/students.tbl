@@ -1,6 +1,6 @@
 name|student_number|city|grade
 STRING|INTEGER|STRING|FLOAT
-0_R|0_R|0_R|0_R
+0_C|1_C|2_C|3_C
 ===
 Ralf Stiebitz|703567|Berlin|2
 Christian Pruschke|703568|Potsdam|2.7

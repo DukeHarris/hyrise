@@ -88,7 +88,7 @@ class GroupkeyIndex : public AbstractIndex {
   }
 
   std::shared_ptr<AbstractIndex> recreateIndex(const c_atable_ptr_t& in, field_t column) {
-    return std::make_shared<GroupkeyIndex<T>>(in, column, true, _id);
+    return std::make_shared<GroupkeyIndex<compound_valueid_key_t>>(in, _columns, true, _id);
   }
 
   std::shared_ptr<AbstractIndex> recreateIndexMergeDict(size_t column,
@@ -236,7 +236,7 @@ class GroupkeyIndex : public AbstractIndex {
 
   // CompoundKey Version.
   explicit GroupkeyIndex(const c_atable_ptr_t& in,
-                         std::vector<field_t>& columns,
+                         const std::vector<field_t>& columns,
                          bool create = true,
                          const std::string id = "volatile_groupkey",
                          bool will_recover_from_archive = false)
@@ -249,7 +249,7 @@ class GroupkeyIndex : public AbstractIndex {
       for (auto column : columns) {
         if (dictionary_sizes.size() <= column)
           dictionary_sizes.resize(column + 1);
-        dictionary_sizes[column] = in->dictionaryAt(column)->size();
+        dictionary_sizes[column] = in->dictionaryAt(0)->size();
       }
 
       // create mutable index

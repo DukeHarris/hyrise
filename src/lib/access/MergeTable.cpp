@@ -70,6 +70,11 @@ MergeColumnStore::~MergeColumnStore() {}
 void MergeColumnStore::executePlanOperation() {
   auto t = checked_pointer_cast<const storage::Store>(getInputTable());
   auto store = std::const_pointer_cast<storage::Store>(t);
+
+  //Drop all indices, because multi-column index merge is not supported
+  store->clearIndices();
+  std::cout << "Table merge!" << std::endl;
+
   storage::ColumnStoreMerger merger = storage::ColumnStoreMerger(store, _forceFullIndexRebuild, _sortIndexName);
 
   if (!store->isColumnStore())
