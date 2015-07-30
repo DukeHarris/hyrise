@@ -24,6 +24,7 @@ class CompoundIndexScan : public PlanOperation {
   static std::shared_ptr<PlanOperation> parse(const Json::Value& data);
   void setMainIndex(const std::string& index_name);
   void setDeltaIndex(const std::string& index_name);
+  void setScannedColumns(std::vector<int> fields);
 
   template <typename T>
   void addPredicate(std::string column, T value) {
@@ -118,6 +119,7 @@ class CompoundIndexScan : public PlanOperation {
   Json::Value _json_predicates;
   bool _validate = false;
   bool _unique_index = false;
+  std::vector<int> scannedColumns;
 
   unsigned int _predicates_added_delta;
   unsigned int _predicates_added_main;
@@ -127,6 +129,7 @@ class CompoundIndexScan : public PlanOperation {
   void setMainIndexDeferred(const std::string& index_name);
   void setDeltaIndexDeferred(const std::string& index_name);
   void parseJsonPredicates(bool set_for_main = true, bool set_for_delta = true);
+
 
   class AddPredicateFunctor {
     CompoundIndexScan* _idx_scan;

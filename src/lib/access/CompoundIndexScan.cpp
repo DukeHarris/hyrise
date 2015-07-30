@@ -35,6 +35,9 @@ void CompoundIndexScan::executePlanOperation() {
   if (!_delta_index_name.empty())
     setDeltaIndex(_delta_index_name);
 
+  io::StorageManager* sm = io::StorageManager::getInstance();
+  sm->recordColumnScan(std::this_thread::get_id(), input.getTable(0)->getName(), scannedColumns);
+
 
   pos_list_t* result = new pos_list_t;
 
@@ -211,14 +214,24 @@ std::shared_ptr<PlanOperation> CompoundIndexScan::parse(const Json::Value& data)
 }
 
 void CompoundIndexScan::parseJsonPredicates(bool set_for_main, bool set_for_delta) {
+
+  std::vector<int> scannedFields;
+
   for (auto&& predicate : _json_predicates) {
     if (predicate.size() != 2)
       throw std::runtime_error("Expecting [column, value] for predicate");
     storage::type_switch<hyrise_basic_types> ts;
     AddPredicateFunctor functor(this, predicate[0].asInt(), predicate[1], set_for_main, set_for_delta);
+    scannedFields.push_back(predicate[0].asInt());
     // get Table
     ts(this->input.getTables()[0]->typeOfColumn(predicate[0].asInt()), functor);
   }
+
+  this->setScannedColumns(scannedFields);
 }
+
+
+void CompoundIndexScan::setScannedColumns(std::vector<int> fields) { scannedColumns = fields; }
+
 }
 }

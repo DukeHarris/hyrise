@@ -5,6 +5,8 @@
 #include "access/system/ParallelizablePlanOperation.h"
 #include "access/expressions/pred_SimpleExpression.h"
 
+#include <vector>
+
 namespace hyrise {
 namespace access {
 
@@ -20,10 +22,12 @@ class SimpleTableScan : public ParallelizablePlanOperation {
   static std::shared_ptr<PlanOperation> parse(const Json::Value& data);
   const std::string vname();
   void setPredicate(SimpleExpression* c);
+  void setScannedColumns(std::vector<int> fields);
 
  private:
   SimpleExpression* _comparator;
   bool _ofDelta = false;
+  std::vector<int> scannedColumns;
 };
 }
 }

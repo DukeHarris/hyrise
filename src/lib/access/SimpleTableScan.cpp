@@ -5,6 +5,7 @@
 
 #include "storage/Store.h"
 #include "storage/PointerCalculator.h"
+#include "io/StorageManager.h"
 
 #include "helper/checked_cast.h"
 
@@ -55,6 +56,10 @@ void SimpleTableScan::executeMaterialized() {
 }
 
 void SimpleTableScan::executePlanOperation() {
+
+  io::StorageManager* sm = io::StorageManager::getInstance();
+  sm->recordColumnScan(std::this_thread::get_id(), input.getTable(0)->getName(), scannedColumns);
+
   if (producesPositions) {
     executePositional();
   } else {
@@ -73,6 +78,16 @@ std::shared_ptr<PlanOperation> SimpleTableScan::parse(const Json::Value& data) {
   }
   pop->setPredicate(buildExpression(data["predicates"]));
 
+  std::vector<int> scannedFields;
+
+  for(unsigned int i=0; i<data["predicates"].size(); i++){
+    if(data["predicates"][i].get("f", "NULL") != "NULL"){
+      scannedFields.push_back(data["predicates"][i]["f"].asInt());
+    }
+  }
+
+  pop->setScannedColumns(scannedFields);
+
   if (data.isMember("ofDelta")) {
     pop->_ofDelta = data["ofDelta"].asBool();
   }
@@ -83,5 +98,7 @@ std::shared_ptr<PlanOperation> SimpleTableScan::parse(const Json::Value& data) {
 const std::string SimpleTableScan::vname() { return "SimpleTableScan"; }
 
 void SimpleTableScan::setPredicate(SimpleExpression* c) { _comparator = c; }
+
+void SimpleTableScan::setScannedColumns(std::vector<int> fields) { scannedColumns = fields; }
 }
 }

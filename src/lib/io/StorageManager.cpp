@@ -52,6 +52,26 @@ StorageManager* StorageManager::getInstance() {
   return static_cast<StorageManager*>(&ResourceManager::getInstance());
 }
 
+void StorageManager::recordColumnScan(std::thread::id thread_id, std::string table, std::vector<int> fields){
+
+  columnScanStatisticsEntry scanEntry;
+  scanEntry.table = table;
+  scanEntry.fields = fields;
+
+  std::cout << table << std::endl;
+  std::cout << thread_id << std::endl;
+
+  if(columnScanStatistics.find(thread_id) != columnScanStatistics.end()){
+    columnScanStatistics[thread_id].push_back(scanEntry);
+  }
+
+  std::cout << columnScanStatistics.size() << std::endl;
+  std::cout << columnScanStatistics[thread_id].size() << std::endl;
+  std::cout << columnScanStatistics[thread_id].back().table << std::endl;
+
+}
+
+
 void StorageManager::loadTable(const std::string& name, std::shared_ptr<storage::AbstractTable> table) {
   add(name, table);
 }

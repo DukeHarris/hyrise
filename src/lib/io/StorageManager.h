@@ -9,6 +9,7 @@
 #include <mutex>
 #include <string>
 #include <vector>
+#include <thread>
 
 namespace hyrise {
 
@@ -25,6 +26,16 @@ class params;
 
 /// Central holder of schema information
 class StorageManager : public ResourceManager {
+
+  struct columnScanStatisticsEntry {
+    std::string table;
+    std::vector<int> fields;
+  };
+
+  private:
+    std::map<std::thread::id, std::vector<columnScanStatisticsEntry>> columnScanStatistics;
+
+
  protected:
   StorageManager() = delete;
   StorageManager(const StorageManager&) = delete;
@@ -36,6 +47,11 @@ class StorageManager : public ResourceManager {
   void addStorageTable(const std::string& name, Args&&... args);
 
  public:
+
+
+  void recordColumnScan(std::thread::id thread_id, std::string table, std::vector<int> fields);
+
+
   /// Retrieve singleton storage-manager instance
   static StorageManager* getInstance();
 
