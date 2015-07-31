@@ -8,7 +8,8 @@
       "type": "CompoundIndexScan",
       "table" : "students",
       "predicates" : [
-        [1, 703567]
+        [1, 703567],
+        [0, "Ralf Stiebitz"]
       ],
       "mainindex": "std_idx_main"
     },
@@ -17,7 +18,7 @@
       "ofDelta" : false,
       "table" : "students",
       "predicates" : [
-        {"type" : "EQ_V", "in" : 0, "f" : 0, "value" : "Bernd Kroker", "vtype": 2}
+        {"type" : "EQ_V", "in" : 0, "f" : 2, "value" : "Berlin", "vtype": 2}
       ]
     },
     "union": {

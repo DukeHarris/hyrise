@@ -43,13 +43,13 @@ class ResourceNotExistsException : public ResourceManagerException {
 /// *need* to be thread-safe.
 class ResourceManager {
 
+ public:
+
   struct columnScanStatisticsEntry {
     std::string table;
     std::vector<int> fields;
   };
 
-
- public:
   typedef std::map<std::string, std::shared_ptr<storage::AbstractResource> > resource_map;
   /// Retrieve singleton ResourceManager instance
   static ResourceManager& getInstance();
@@ -92,6 +92,7 @@ class ResourceManager {
   resource_map all() const;
 
   void recordColumnScan(std::thread::id thread_id, std::string table, std::vector<int> fields);
+  std::map<std::thread::id, std::vector<columnScanStatisticsEntry>> getColumnScanStatistics();
 
  private:
   /// The actual schema

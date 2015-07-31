@@ -90,7 +90,6 @@ std::shared_ptr<PlanOperation> SimpleTableScan::parse(const Json::Value& data) {
   }
 
   pop->setScannedTable(data["table"].asString());
-  std::cout << data["table"].asString() << std::endl;
 
 
   pop->recordColumnScan(data["table"].asString(), scannedFields);
@@ -113,7 +112,6 @@ void SimpleTableScan::setScannedTable(std::string table) { scannedTable = scanne
 void SimpleTableScan::recordColumnScan(std::string table, std::vector<int> fields){
 
   io::StorageManager* sm = io::StorageManager::getInstance();
-  std::cout << "Table:" << table << std::endl;
   sm->recordColumnScan(std::this_thread::get_id(), table, fields);
 
 }

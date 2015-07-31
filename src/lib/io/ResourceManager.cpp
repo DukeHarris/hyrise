@@ -89,10 +89,9 @@ void ResourceManager::recordColumnScan(std::thread::id thread_id, std::string ta
   scanEntry.table = table;
   scanEntry.fields = fields;
 
-  std::cout << table << std::endl;
-  std::cout << thread_id << std::endl;
-  std::cout << "empty before:" << columnScanStatistics.empty() << std::endl;
-  std::cout << "size before:" << columnScanStatistics.size() << std::endl;
+  std::cout << "Table: " << table << std::endl;
+  std::cout << "Thread: " << thread_id << std::endl;
+  std::cout << "size before: " << columnScanStatistics.size() << std::endl;
 
   if(columnScanStatistics.count(thread_id) == 1){
     columnScanStatistics[thread_id].push_back(scanEntry);
@@ -101,12 +100,14 @@ void ResourceManager::recordColumnScan(std::thread::id thread_id, std::string ta
     columnScanStatistics[thread_id].push_back(scanEntry);
   }
 
-  std::cout << "size after:" << columnScanStatistics.size() << std::endl;
-  std::cout << columnScanStatistics[thread_id].size() << std::endl;
-  std::cout << columnScanStatistics[thread_id].back().table << std::endl;
+  std::cout << "size after: " << columnScanStatistics.size() << std::endl;
+  std::cout << "thread size: " << columnScanStatistics[thread_id].size() << std::endl;
 
 }
 
+std::map<std::thread::id, std::vector<ResourceManager::columnScanStatisticsEntry>> ResourceManager::getColumnScanStatistics(){
+  return columnScanStatistics;
+}
 
 }
 }  // namespace hyrise::io

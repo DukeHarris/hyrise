@@ -1,0 +1,15 @@
+{
+  "operators" : {
+    "-1" : {
+      "type" : "TableLoad",
+      "filename" : "test/tables/metadata.tbl",
+      "table" : "reference"
+    },
+    "get": {
+      "type" : "GetScanStatistics"
+    }
+  },
+  "edges" : [
+    ["-1", "get"]
+  ]
+}
