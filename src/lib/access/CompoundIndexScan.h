@@ -25,6 +25,7 @@ class CompoundIndexScan : public PlanOperation {
   void setMainIndex(const std::string& index_name);
   void setDeltaIndex(const std::string& index_name);
   void setScannedColumns(std::vector<int> fields);
+  void setScannedTable(std::string table);
 
   template <typename T>
   void addPredicate(std::string column, T value) {
@@ -120,6 +121,7 @@ class CompoundIndexScan : public PlanOperation {
   bool _validate = false;
   bool _unique_index = false;
   std::vector<int> scannedColumns;
+  std::string scannedTable;
 
   unsigned int _predicates_added_delta;
   unsigned int _predicates_added_main;

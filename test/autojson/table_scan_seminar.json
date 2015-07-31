@@ -4,14 +4,6 @@
       "type" : "GetTable",
       "name" : "students"
     },
-    "indexscan": {
-      "type": "CompoundIndexScan",
-      "table" : "students",
-      "predicates" : [
-        [1, 703567]
-      ],
-      "mainindex": "std_idx_main"
-    },
     "tablescan": {
       "type" : "SimpleTableScan",
       "ofDelta" : false,
@@ -19,15 +11,9 @@
       "predicates" : [
         {"type" : "EQ_V", "in" : 0, "f" : 0, "value" : "Bernd Kroker", "vtype": 2}
       ]
-    },
-    "union": {
-      "type": "UnionScan"
     }
   },
   "edges" : [
-    ["get", "indexscan"],
-    ["get", "tablescan"],
-    ["indexscan","union"],
-    ["tablescan","union"]
+    ["get", "tablescan"]
   ]
 }

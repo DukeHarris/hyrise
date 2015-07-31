@@ -57,9 +57,6 @@ void SimpleTableScan::executeMaterialized() {
 
 void SimpleTableScan::executePlanOperation() {
 
-  io::StorageManager* sm = io::StorageManager::getInstance();
-  sm->recordColumnScan(std::this_thread::get_id(), input.getTable(0)->getName(), scannedColumns);
-
   if (producesPositions) {
     executePositional();
   } else {
@@ -88,6 +85,16 @@ std::shared_ptr<PlanOperation> SimpleTableScan::parse(const Json::Value& data) {
 
   pop->setScannedColumns(scannedFields);
 
+  if (!data.isMember("table")) {
+    throw std::runtime_error("Table Not set");
+  }
+
+  pop->setScannedTable(data["table"].asString());
+  std::cout << data["table"].asString() << std::endl;
+
+
+  pop->recordColumnScan(data["table"].asString(), scannedFields);
+
   if (data.isMember("ofDelta")) {
     pop->_ofDelta = data["ofDelta"].asBool();
   }
@@ -100,5 +107,16 @@ const std::string SimpleTableScan::vname() { return "SimpleTableScan"; }
 void SimpleTableScan::setPredicate(SimpleExpression* c) { _comparator = c; }
 
 void SimpleTableScan::setScannedColumns(std::vector<int> fields) { scannedColumns = fields; }
+
+void SimpleTableScan::setScannedTable(std::string table) { scannedTable = scannedTable; }
+
+void SimpleTableScan::recordColumnScan(std::string table, std::vector<int> fields){
+
+  io::StorageManager* sm = io::StorageManager::getInstance();
+  std::cout << "Table:" << table << std::endl;
+  sm->recordColumnScan(std::this_thread::get_id(), table, fields);
+
+}
+
 }
 }

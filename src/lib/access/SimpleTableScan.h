@@ -6,6 +6,7 @@
 #include "access/expressions/pred_SimpleExpression.h"
 
 #include <vector>
+#include <string>
 
 namespace hyrise {
 namespace access {
@@ -23,11 +24,14 @@ class SimpleTableScan : public ParallelizablePlanOperation {
   const std::string vname();
   void setPredicate(SimpleExpression* c);
   void setScannedColumns(std::vector<int> fields);
+  void setScannedTable(std::string table);
+  void recordColumnScan(std::string table, std::vector<int> fields);
 
  private:
   SimpleExpression* _comparator;
   bool _ofDelta = false;
   std::vector<int> scannedColumns;
+  std::string scannedTable;
 };
 }
 }

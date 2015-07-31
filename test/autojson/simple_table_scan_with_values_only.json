@@ -37,17 +37,18 @@
     "query" : {
       "type" : "SimpleTableScan",
       "ofDelta" : true,
+      "table" : "reference",
       "predicates" : [
         {"type": "OR"},
         {"type": "AND"},
         {"type": "AND"},
         {"type" : "EQ_V", "in" : 0, "f" : 1, "value" : 2},
-        {"type" : "LT_V", "in" : 0, "f" : 3, "value" : 3.0, "vtype": 1},        
-        {"type" : "GT_V", "in" : 0, "f" : 3, "value" : 0.3, "vtype": 1},     
+        {"type" : "LT_V", "in" : 0, "f" : 3, "value" : 3.0, "vtype": 1},
+        {"type" : "GT_V", "in" : 0, "f" : 3, "value" : 0.3, "vtype": 1},
         {"type" : "EQ_V", "in" : 0, "f" : 4, "value" : "Welt", "vtype": 2}
       ]
     }
-  }, 
+  },
   "edges" : [
     ["rl", "set"],
     ["set", "build"],

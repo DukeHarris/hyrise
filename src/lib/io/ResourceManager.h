@@ -6,6 +6,8 @@
 #include <mutex>
 #include <string>
 #include <stdexcept>
+#include <vector>
+#include <thread>
 
 #include "helper/types.h"
 #include "helper/checked_cast.h"
@@ -40,6 +42,13 @@ class ResourceNotExistsException : public ResourceManagerException {
 /// being thread-safe since all interactions with the resource manager
 /// *need* to be thread-safe.
 class ResourceManager {
+
+  struct columnScanStatisticsEntry {
+    std::string table;
+    std::vector<int> fields;
+  };
+
+
  public:
   typedef std::map<std::string, std::shared_ptr<storage::AbstractResource> > resource_map;
   /// Retrieve singleton ResourceManager instance
@@ -82,6 +91,8 @@ class ResourceManager {
   /// top of it
   resource_map all() const;
 
+  void recordColumnScan(std::thread::id thread_id, std::string table, std::vector<int> fields);
+
  private:
   /// The actual schema
   mutable resource_map _resources;
@@ -91,6 +102,9 @@ class ResourceManager {
   ResourceManager() = default;
   ResourceManager(const ResourceManager&) = delete;
   ResourceManager& operator=(const ResourceManager&) = delete;
+
+  std::map<std::thread::id, std::vector<columnScanStatisticsEntry>> columnScanStatistics;
+
 };
 }
 }  // namespace hyrise::io

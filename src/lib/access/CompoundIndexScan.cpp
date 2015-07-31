@@ -210,6 +210,14 @@ std::shared_ptr<PlanOperation> CompoundIndexScan::parse(const Json::Value& data)
     throw std::runtime_error("No predicates passed");
   idx_scan->_json_predicates = data["predicates"];
 
+  if (!data.isMember("table")) {
+    throw std::runtime_error("Table Not set");
+  }
+
+  idx_scan->setScannedTable(data["table"].asString());
+  std::cout << data["table"].asString() << std::endl;
+
+
   return idx_scan;
 }
 
@@ -232,6 +240,7 @@ void CompoundIndexScan::parseJsonPredicates(bool set_for_main, bool set_for_delt
 
 
 void CompoundIndexScan::setScannedColumns(std::vector<int> fields) { scannedColumns = fields; }
+void CompoundIndexScan::setScannedTable(std::string table) { scannedTable = scannedTable; }
 
 }
 }
