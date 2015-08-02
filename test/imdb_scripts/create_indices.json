@@ -1,0 +1,40 @@
+{
+  "operators" : {
+    "get": {
+      "type" : "GetTable",
+      "name" : "testtable"
+    },
+    "create": {
+      "type": "CreateGroupkeyIndex",
+      "fields": ["col_0"],
+      "index_name": "testtable_single_0"
+    },
+    "create1": {
+      "type": "CreateGroupkeyIndex",
+      "fields": ["col_1"],
+      "index_name": "testtable_single_1"
+    },
+    "create2": {
+      "type": "CreateGroupkeyIndex",
+      "fields": ["col_2"],
+      "index_name": "testtable_single_2"
+    },
+    "create3": {
+      "type": "CreateGroupkeyIndex",
+      "fields": ["col_3"],
+      "index_name": "testtable_single_3"
+    },
+    "create4": {
+      "type": "CreateGroupkeyIndex",
+      "fields": ["col_4"],
+      "index_name": "testtable_single_4"
+    }
+  },
+  "edges" : [
+    ["get", "create"],
+    ["get", "create1"],
+    ["get", "create2"],
+    ["get", "create3"],
+    ["get", "create4"]
+  ]
+}

@@ -1,0 +1,1 @@
+{"edges": [["get", "scan"]], "operators": {"scan": {"table": "testtable", "type": "CompoundIndexScan", "mainindex": "testtable_single_0", "predicates": [[0, 57996]]}, "get": {"type": "GetTable", "name": "testtable"}}}
