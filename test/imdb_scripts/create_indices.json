@@ -4,7 +4,7 @@
       "type" : "GetTable",
       "name" : "testtable"
     },
-    "create": {
+    "create0": {
       "type": "CreateGroupkeyIndex",
       "fields": ["col_0"],
       "index_name": "testtable_single_0"
@@ -28,13 +28,25 @@
       "type": "CreateGroupkeyIndex",
       "fields": ["col_4"],
       "index_name": "testtable_single_4"
+    },
+    "create12": {
+      "type": "CreateGroupkeyIndex",
+      "fields": ["col_1", "col_2"],
+      "index_name": "testtable_multi_12"
+    },
+    "create34": {
+      "type": "CreateGroupkeyIndex",
+      "fields": ["col_3", "col_4"],
+      "index_name": "testtable_multi_34"
     }
   },
   "edges" : [
-    ["get", "create"],
+    ["get", "create0"],
     ["get", "create1"],
     ["get", "create2"],
     ["get", "create3"],
-    ["get", "create4"]
+    ["get", "create4"],
+    ["get", "create12"],
+    ["get", "create34"]
   ]
 }

@@ -1,1 +1,1 @@
-{"edges": [["get", "scan"]], "operators": {"scan": {"table": "testtable", "type": "SimpleTableScan", "ofDelta": false, "predicates": [{"f": 2, "type": "EQ_V", "value": 29323, "vtype": 0, "in": 0}]}, "get": {"type": "GetTable", "name": "testtable"}}}
+{"operators": {"scan": {"table": "testtable", "type": "SimpleTableScan", "predicates": [{"type": "EQ_V", "value": 77767, "f": 2, "vtype": 0, "in": 0}], "ofDelta": false}, "get": {"type": "GetTable", "name": "testtable"}}, "edges": [["get", "scan"]]}

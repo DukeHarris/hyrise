@@ -1,0 +1,21 @@
+{
+  "operators" : {
+    "get": {
+      "type" : "GetTable",
+      "name" : "testtable"
+    },
+    "scan": {
+      "type" : "SimpleTableScan",
+      "ofDelta" : false,
+      "table" : "testtable",
+      "predicates" : [
+        {"type": "AND"},
+        {"type" : "EQ_V", "in" : 0, "f" : 1, "value" : "6KA3bamLgO", "vtype": 2},
+        {"type" : "EQ_V", "in" : 0, "f" : 1, "value" : "6KA3bamLgO", "vtype": 2}
+      ]
+    }
+  },
+  "edges" : [
+    ["get", "scan"]
+  ]
+}

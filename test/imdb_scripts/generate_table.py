@@ -104,3 +104,81 @@ for column in range(0,columns):
 
 	with open("queries/single/" + str(column) + "_with_index.json", 'w') as outfile:
 		json.dump(data, outfile)
+
+# create multi column queries
+
+for (column1,column2) in [(1,2),(3,4)]:
+
+	#table scan
+	with open('scan_test_multi.json') as data_file:
+		data = json.load(data_file)
+
+
+	data["operators"]["scan"]["predicates"][1]["f"] = column1
+	print(data["operators"]["scan"]["predicates"][1]["f"])
+
+	if column1 % 2 == 0:
+		data["operators"]["scan"]["predicates"][1]["value"] = randomIntegers[randint(0,len(randomIntegers)-1)]
+		data["operators"]["scan"]["predicates"][1]["vtype"] = 0
+	else:
+		data["operators"]["scan"]["predicates"][1]["value"] = randomStrings[randint(0,len(randomStrings)-1)]
+		data["operators"]["scan"]["predicates"][1]["vtype"] = 2
+
+
+	data["operators"]["scan"]["predicates"][2]["f"] = column2
+	print(data["operators"]["scan"]["predicates"][2]["f"])
+
+	if column2 % 2 == 0:
+		data["operators"]["scan"]["predicates"][2]["value"] = randomIntegers[randint(0,len(randomIntegers)-1)]
+		data["operators"]["scan"]["predicates"][2]["vtype"] = 0
+	else:
+		data["operators"]["scan"]["predicates"][2]["value"] = randomStrings[randint(0,len(randomStrings)-1)]
+		data["operators"]["scan"]["predicates"][2]["vtype"] = 2
+
+
+	with open("queries/multi/" + str(column1) + str(column2) + "_no_index.json", 'w') as outfile:
+		json.dump(data, outfile)
+
+
+	# index scan
+	with open('index_scan_multi.json') as data_file:
+			data = json.load(data_file)
+
+	if column1 % 2 == 0:
+		data["operators"]["scan"]["predicates"][0] = [column1, randomIntegers[randint(0,len(randomIntegers)-1)]]
+	else:
+		data["operators"]["scan"]["predicates"][0] = [column1, randomStrings[randint(0,len(randomStrings)-1)]]
+
+	if column2 % 2 == 0:
+		data["operators"]["scan"]["predicates"][1] = [column2, randomIntegers[randint(0,len(randomIntegers)-1)]]
+	else:
+		data["operators"]["scan"]["predicates"][1] = [column2, randomStrings[randint(0,len(randomStrings)-1)]]
+
+	data["operators"]["scan"]["mainindex"] = "testtable_multi_" + str(column1) + str(column2)
+
+	with open("queries/multi/" + str(column1) + str(column2) + "_with_index.json", 'w') as outfile:
+		json.dump(data, outfile)
+
+
+	#multi
+	with open('multi_test.json') as data_file:
+		data = json.load(data_file)
+
+	if column1 % 2 == 0:
+		data["operators"]["indexscan"]["predicates"][0] = [column1, randomIntegers[randint(0,len(randomIntegers)-1)]]
+	else:
+		data["operators"]["indexscan"]["predicates"][0] = [column1, randomStrings[randint(0,len(randomStrings)-1)]]
+	data["operators"]["indexscan"]["mainindex"] = "testtable_single_" + str(column1)
+
+	data["operators"]["tablescan"]["predicates"][0]["f"] = column2
+	print(data["operators"]["tablescan"]["predicates"][0]["f"])
+
+	if column2 % 2 == 0:
+		data["operators"]["tablescan"]["predicates"][0]["value"] = randomIntegers[randint(0,len(randomIntegers)-1)]
+		data["operators"]["tablescan"]["predicates"][0]["vtype"] = 0
+	else:
+		data["operators"]["tablescan"]["predicates"][0]["value"] = randomStrings[randint(0,len(randomStrings)-1)]
+		data["operators"]["tablescan"]["predicates"][0]["vtype"] = 2
+
+	with open("queries/multi/" + str(column1) + str(column2) + "_with_single_index.json", 'w') as outfile:
+		json.dump(data, outfile)
