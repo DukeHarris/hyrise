@@ -10,8 +10,8 @@ def id_generator(size=10, chars=string.ascii_uppercase + string.digits + string.
 	return ''.join(random.choice(chars) for _ in range(size))
 
 
-columns = 5
-rows = 100000
+columns = 100
+rows = 1000000
 output = "testtable.tbl"
 distinctValues = 100;
 
@@ -67,9 +67,6 @@ for row in range(0,rows):
 		else:
 			rowString += randomStrings[randint(0,len(randomStrings)-1)]
 	outFile.write(rowString + "\n")
-
-
-#create indices
 
 
 # create single column queries

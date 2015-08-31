@@ -1,0 +1,1 @@
+{"edges": [["get", "scan"]], "operators": {"get": {"type": "GetTable", "name": "testtable"}, "scan": {"type": "SimpleTableScan", "table": "testtable", "predicates": [{"type": "EQ", "f": 0, "in": 0, "vtype": 0, "value": 888366}], "ofDelta": false}}}

@@ -1,0 +1,17 @@
+{
+  "operators" : {
+    "get": {
+      "type" : "GetTable",
+      "name" : "testtable"
+    },
+    "scan": {
+      "type": "CompoundIndexScan",
+      "table" : "testtable",
+      "predicates" : [],
+      "mainindex": "std_idx_main"
+    }
+  },
+  "edges" : [
+    ["get", "scan"]
+  ]
+}

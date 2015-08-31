@@ -1,0 +1,15 @@
+{
+  "operators" : {
+    "-1" : {
+      "type" : "TableLoad",
+      "filename" : "test/imdb_scripts/optimization/testtable.tbl",
+      "table" : "testtable"
+    },
+    "0": {
+      "type": "NoOp"
+    }
+  },
+  "edges" : [
+    ["-1", "0"]
+  ]
+}

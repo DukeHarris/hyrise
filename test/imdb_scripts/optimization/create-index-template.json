@@ -1,0 +1,16 @@
+{
+  "operators" : {
+    "get": {
+      "type" : "GetTable",
+      "name" : "testtable"
+    },
+    "create": {
+      "type": "CreateGroupkeyIndex",
+      "fields": ["col_0"],
+      "index_name": "testtable_single_0"
+    }
+  },
+  "edges" : [
+    ["get", "create"]
+  ]
+}

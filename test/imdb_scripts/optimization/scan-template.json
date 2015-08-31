@@ -1,0 +1,17 @@
+{
+  "operators" : {
+    "get": {
+      "type" : "GetTable",
+      "name" : "testtable"
+    },
+    "scan": {
+      "type" : "SimpleTableScan",
+      "ofDelta" : false,
+      "table" : "testtable",
+      "predicates" : []
+    }
+  },
+  "edges" : [
+    ["get", "scan"]
+  ]
+}
