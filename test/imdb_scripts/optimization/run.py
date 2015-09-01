@@ -385,6 +385,8 @@ for columnsScanned in workload:
 			outFile.write(str(totalTime) + "\n")
 			outFile.close()
 
+exit("end phase 2")
+
 ###################
 # Phase 3 (Workload Change)
 #################
